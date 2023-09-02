@@ -32,16 +32,21 @@ func validateCIDR(cidrAddrs ...string) (bool, error) {
 		pCIDRs.ipnets = append(pCIDRs.ipnets, ipnet)
 		pCIDRs.errs = append(pCIDRs.errs, err)
 	}
+	/*
+		TODO: we could potentially factor out the second iteration here and discover the network address for the inputs in the same iteration as the first round
+	*/
+	for i := range pCIDRs.ipnets {
+		for j := range pCIDRs.ipnets {
+			if i != j {
+				result := cidr.IPCompare(pCIDRs.ipnets[i].IP, pCIDRs.ipnets[j].IP)
+				switch result {
+				case 0:
 
-	for j := 1; j < len(pCIDRs.ipnets); j++ {
-		result := cidr.IPCompare(pCIDRs.ipnets[j-1].IP, pCIDRs.ipnets[j].IP)
-		switch result {
-		case 0:
+					return true, validateCIDRSCompareErr
 
-			return true, validateCIDRSCompareErr
-
+				}
+			}
 		}
 	}
-
 	return false, nil
 }
