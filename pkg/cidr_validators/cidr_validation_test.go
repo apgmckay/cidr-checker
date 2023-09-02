@@ -87,7 +87,7 @@ func runTests(t *testing.T, tests []struct {
 		if errors.Is(err, test.expectedError) {
 			t.Logf("Errors are equal.\n")
 		} else {
-			t.Logf("Errors are not equal.\n\t%s\n\t%s", test.expectedError, err)
+			t.Logf("Errors are not equal.\n\texpected: %s\n\tgot: %s", test.expectedError, err)
 			t.Fail()
 		}
 	}
