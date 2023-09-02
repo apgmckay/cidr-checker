@@ -15,17 +15,17 @@ func TestValidateCIDR(t *testing.T) {
 		{
 			[]string{"10.0.0.0/8"},
 			false,
-			validateInputCIDRsErr,
+			ValidateInputCIDRsErr,
 		},
 		{
 			[]string{"10.0.0.0/8", "10.0.0.0/16"},
 			true,
-			validateCIDRSCompareErr,
+			ValidateCIDRSCompareErr,
 		},
 		{
 			[]string{"10.8.0.0/32", "10.8.0.0/32"},
 			true,
-			validateCIDRSCompareErr,
+			ValidateCIDRSCompareErr,
 		},
 		{
 			[]string{"10.0.0.0/24", "10.0.1.0/24"},
@@ -50,7 +50,7 @@ func TestValidateCIDR(t *testing.T) {
 		{
 			[]string{"10.0.0.0/28", "10.0.0.0/28", "10.0.0.0/28"},
 			true,
-			validateCIDRSCompareErr,
+			ValidateCIDRSCompareErr,
 		},
 		{
 			[]string{"10.8.0.0/28", "10.8.0.16/28", "10.0.0.32/28", "10.0.0.48/28"},

@@ -1,20 +1,16 @@
 package main
 
 import (
-	cidr_validator "cidr-checker/pkg/cidr_validators"
-	"fmt"
+	parser "cidr-checker/pkg/parser"
+	"log"
 	"os"
 )
 
 func main() {
-	if len(os.Args) > 1 {
-		result, err := cidr_validator.ValidateCIDR(os.Args[1:]...)
-		if result {
-			fmt.Printf("%s\n", err)
-		} else {
-			fmt.Printf("All good no overlapping CIDRs.\n")
-		}
-	} else {
-		// TODO: we also want to read from Stdin to allow piping to the program
+	output, err := parser.ParseAndRun(os.Args[1:]...)
+	if err != nil {
+		log.Printf("%s", err)
+		os.Exit(1)
 	}
+	log.Printf("%s", output)
 }
