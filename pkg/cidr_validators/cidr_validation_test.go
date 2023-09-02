@@ -79,7 +79,7 @@ func runTests(t *testing.T, tests []struct {
 	for _, test := range tests {
 		var testCase bool
 		var err error
-		testCase, err = validateCIDR(test.inputs...)
+		testCase, err = ValidateCIDR(test.inputs...)
 		if testCase != test.expected {
 			t.Logf("%t and %t are not equal.\n", testCase, test.expected)
 			t.Fail()

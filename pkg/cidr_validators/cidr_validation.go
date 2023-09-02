@@ -11,7 +11,7 @@ var validateCIDRSCompareErr = errors.New("ERROR: ip comparison failed")
 var validateCIDRFailedErr = errors.New("ERROR: parsing cidr failed")
 var validateInputCIDRsErr = errors.New("ERROR: must input 1 or more cidrs")
 
-func validateCIDR(cidrAddrs ...string) (bool, error) {
+func ValidateCIDR(cidrAddrs ...string) (bool, error) {
 	result, err := checkCIDRInputLength(cidrAddrs...)
 	if err != nil {
 		return result, err
