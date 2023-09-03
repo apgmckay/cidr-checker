@@ -47,5 +47,6 @@ func checkCIDRInputLength(cidrAddrs ...string) (bool, error) {
 		result = false
 		err = ValidateInputCIDRsErr
 	}
+	println(result)
 	return result, err
 }
