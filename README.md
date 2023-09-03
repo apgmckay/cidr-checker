@@ -18,6 +18,15 @@ echo "10.0.0.0/24 10.0.1.0/24 10.0.2.0/24" | xargs cidr-checker
 2023/09/03 14:00:20 All good no overlapping CIDRs.
 ```
 
+## Build and Install
+
+You will need [golang's tooling to install](https://go.dev/doc/install), once install.
+
+```
+go build . 
+mv cidr-checker /usr/local/bin
+```
+
 ## TODO
 - Make errors more descriptive.
 - Add help
