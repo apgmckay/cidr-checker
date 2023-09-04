@@ -2,9 +2,23 @@ package cidr_validation
 
 import (
 	"errors"
+	"fmt"
 	"net"
 	"testing"
 )
+
+func TestCIDRContains(t *testing.T) {
+	tests := []struct {
+		inputs   []string // We could structure this so that that input 1 always is used as overarching addreses and see if all following addresses are contained in it.
+		expected struct {
+			returnString  string
+			returnBoolean bool
+			returnErr     error
+		}
+		expectedError error
+	}{}
+	runCIDRContainsTests(t, tests)
+}
 
 func TestValidateCIDR(t *testing.T) {
 	tests := []struct {
@@ -68,10 +82,32 @@ func TestValidateCIDR(t *testing.T) {
 			nil,
 		},
 	}
-	runTests(t, tests)
+	runValidationTests(t, tests)
 }
 
-func runTests(t *testing.T, tests []struct {
+func runCIDRContainsTests(t *testing.T, tests []struct {
+	inputs   []string
+	expected struct {
+		returnString  string
+		returnBoolean bool
+		returnErr     error
+	}
+	expectedError error
+}) {
+	for _, test := range tests {
+		var testCaseString string
+		var testCaseBool bool
+		var err error
+
+		testCaseString, testCaseBool, err = CIDRCompare(test.inputs[0], test.inputs[1:]...)
+		fmt.Println(testCaseString)
+		fmt.Println(testCaseBool)
+		fmt.Println(err)
+	}
+
+}
+
+func runValidationTests(t *testing.T, tests []struct {
 	inputs        []string
 	expected      bool
 	expectedError error

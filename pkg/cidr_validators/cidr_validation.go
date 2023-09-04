@@ -2,6 +2,7 @@ package cidr_validation
 
 import (
 	"errors"
+	"fmt"
 	"net"
 
 	"github.com/3th1nk/cidr"
@@ -39,6 +40,11 @@ func ValidateCIDR(cidrAddrs ...string) (bool, error) {
 	return result, nil
 }
 
+func CIDRCompare(candidate string, cidrAddrs ...string) (string, bool, error) {
+	fmt.Println("hello")
+	return "hello", true, nil
+}
+
 func checkCIDRInputLength(cidrAddrs ...string) (bool, error) {
 	result := false
 	var err error
@@ -47,6 +53,5 @@ func checkCIDRInputLength(cidrAddrs ...string) (bool, error) {
 		result = false
 		err = ValidateInputCIDRsErr
 	}
-	println(result)
 	return result, err
 }
