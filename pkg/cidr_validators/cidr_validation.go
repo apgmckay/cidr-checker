@@ -2,7 +2,6 @@ package cidr_validation
 
 import (
 	"errors"
-	"fmt"
 	"net"
 
 	"github.com/3th1nk/cidr"
@@ -40,9 +39,26 @@ func ValidateCIDR(cidrAddrs ...string) (bool, error) {
 	return result, nil
 }
 
-func CIDRCompare(candidate string, cidrAddrs ...string) (string, bool, error) {
-	fmt.Println("hello")
-	return "hello", true, nil
+func CIDRCompare(candidate string, cidrAddrs ...string) (bool, error) {
+	var result bool
+	_, ipnetA, err := net.ParseCIDR(candidate)
+	if err != nil {
+		return false, err
+	}
+	for _, v := range cidrAddrs {
+		_, ipnetB, err := net.ParseCIDR(v)
+		if err != nil {
+			return false, err
+		}
+
+		if ipnetA.Contains(ipnetB.IP) {
+			result = true
+			err = nil
+		} else {
+			return false, ValidateCIDRSCompareErr
+		}
+	}
+	return result, err
 }
 
 func checkCIDRInputLength(cidrAddrs ...string) (bool, error) {
