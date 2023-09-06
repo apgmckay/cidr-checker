@@ -28,5 +28,4 @@ mv cidr-checker /usr/local/bin
 ```
 
 ## TODO
-- Make errors more descriptive.
 - Add help
