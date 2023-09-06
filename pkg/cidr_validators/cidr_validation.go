@@ -2,6 +2,7 @@ package cidr_validation
 
 import (
 	"errors"
+	"fmt"
 	"net"
 
 	"github.com/3th1nk/cidr"
@@ -31,7 +32,7 @@ func ValidateCIDR(cidrAddrs ...string) (bool, error) {
 				switch compareResult {
 				case 0:
 					result = true
-					return result, ValidateCIDRSCompareErr
+					return result, fmt.Errorf("%w, IPs %s and %s are in the same range.\n", ValidateCIDRSCompareErr, cidrAddrs[i], cidrAddrs[j])
 				}
 			}
 		}
