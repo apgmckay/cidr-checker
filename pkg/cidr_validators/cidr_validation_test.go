@@ -6,6 +6,57 @@ import (
 	"testing"
 )
 
+func TestCIDRContains(t *testing.T) {
+	tests := []struct {
+		inputs        []string
+		expected      bool
+		expectedError error
+	}{
+		{
+			inputs:        []string{"10.0.0.0/8", "10.0.0.0/24"},
+			expected:      true,
+			expectedError: nil,
+		},
+		{
+
+			inputs:        []string{"10.0.0.0/8", "10.0.0.0/24", "10.0.1.0/24"},
+			expected:      true,
+			expectedError: nil,
+		},
+		{
+
+			inputs:        []string{"10.0.0.0/8", "10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24"},
+			expected:      true,
+			expectedError: nil,
+		},
+		{
+
+			inputs:        []string{"10.0.0.0/8", "10.0.0.0/24", "192.168.0.1/16", "10.0.2.0/24"},
+			expected:      false,
+			expectedError: ValidateCIDRSCompareErr,
+		},
+		{
+
+			inputs:        []string{"10.0.0.0/28", "10.2.0.0/24"},
+			expected:      false,
+			expectedError: ValidateCIDRSCompareErr,
+		},
+		{
+
+			inputs:        []string{"10.0.0.0/28", "10.0.0.16/28"},
+			expected:      false,
+			expectedError: ValidateCIDRSCompareErr,
+		},
+		{
+
+			inputs:        []string{"10.0.0.0/8", "10.0.0.0/28", "192.168.1.1/28", "10.0.1.0/28"},
+			expected:      false,
+			expectedError: ValidateCIDRSCompareErr,
+		},
+	}
+	runCIDRContainsTests(t, tests)
+}
+
 func TestValidateCIDR(t *testing.T) {
 	tests := []struct {
 		inputs        []string
@@ -68,10 +119,31 @@ func TestValidateCIDR(t *testing.T) {
 			nil,
 		},
 	}
-	runTests(t, tests)
+	runValidationTests(t, tests)
 }
 
-func runTests(t *testing.T, tests []struct {
+func runCIDRContainsTests(t *testing.T, tests []struct {
+	inputs        []string
+	expected      bool
+	expectedError error
+}) {
+	for _, test := range tests {
+		testCase, err := CIDRCompare(test.inputs[0], test.inputs[1:]...)
+		if testCase != test.expected {
+			t.Logf("%t and %t are not equal.\n", testCase, test.expected)
+			t.Fail()
+		}
+		if errors.Is(err, test.expectedError) {
+			t.Logf("Errors are equal.\n")
+		} else {
+			t.Logf("Errors are not equal.\n\texpected: %s\n\tgot: %s", test.expectedError, err)
+			t.Fail()
+		}
+	}
+
+}
+
+func runValidationTests(t *testing.T, tests []struct {
 	inputs        []string
 	expected      bool
 	expectedError error

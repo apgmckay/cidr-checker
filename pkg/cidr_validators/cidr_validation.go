@@ -39,6 +39,28 @@ func ValidateCIDR(cidrAddrs ...string) (bool, error) {
 	return result, nil
 }
 
+func CIDRCompare(candidate string, cidrAddrs ...string) (bool, error) {
+	var result bool
+	_, ipnetA, err := net.ParseCIDR(candidate)
+	if err != nil {
+		return false, err
+	}
+	for _, v := range cidrAddrs {
+		_, ipnetB, err := net.ParseCIDR(v)
+		if err != nil {
+			return false, err
+		}
+
+		if ipnetA.Contains(ipnetB.IP) {
+			result = true
+			err = nil
+		} else {
+			return false, ValidateCIDRSCompareErr
+		}
+	}
+	return result, err
+}
+
 func checkCIDRInputLength(cidrAddrs ...string) (bool, error) {
 	result := false
 	var err error
@@ -47,6 +69,5 @@ func checkCIDRInputLength(cidrAddrs ...string) (bool, error) {
 		result = false
 		err = ValidateInputCIDRsErr
 	}
-	println(result)
 	return result, err
 }
