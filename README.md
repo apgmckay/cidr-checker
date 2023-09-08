@@ -1,6 +1,8 @@
 # CIDR-Checker
 
-![example workflow](https://github.com/github/docs/actions/workflows/go.yml/badge.svg)
+[![GitHub](https://img.shields.io/github/license/apgmckay/cidr-checker)](https://github.com/apgmckay/cidr-checker)
+
+
 _________ .___________ __________       .__            __
 \_   ___ \|   \______ \\______   \ ____ |  |__   ____ |  | __ ___________ 
 /    \  \/|   ||    |  \|       _// ___\|  |  \_/ __ \|  |/ // __ \_  __ \
