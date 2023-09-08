@@ -44,5 +44,18 @@ go build .
 mv cidr-checker /usr/local/bin
 ```
 
+## Testing
+
+### Prerequisite
+
+You must have [Golang tooling installed](https://go.dev/doc/install).
+
+### Running
+
+```
+$ cd pkg/cidr_validators/
+$ go test
+```
+
 ## TODO
 - Add help
