@@ -1,6 +1,23 @@
 # CIDR-Checker
 
+![Your Workflow Name](https://github.com/apgmckay/cidr-checker/workflows/Go/badge.svg)
+
+```
+  ______   ______  _______   _______             __                  __                           
+ /      \ /      |/       \ /       \           /  |                /  |                          
+/$$$$$$  |$$$$$$/ $$$$$$$  |$$$$$$$  |  _______ $$ |____    ______  $$ |   __   ______    ______  
+$$ |  $$/   $$ |  $$ |  $$ |$$ |__$$ | /       |$$      \  /      \ $$ |  /  | /      \  /      \ 
+$$ |        $$ |  $$ |  $$ |$$    $$< /$$$$$$$/ $$$$$$$  |/$$$$$$  |$$ |_/$$/ /$$$$$$  |/$$$$$$  |
+$$ |   __   $$ |  $$ |  $$ |$$$$$$$  |$$ |      $$ |  $$ |$$    $$ |$$   $$<  $$    $$ |$$ |  $$/ 
+$$ \__/  | _$$ |_ $$ |__$$ |$$ |  $$ |$$ \_____ $$ |  $$ |$$$$$$$$/ $$$$$$  \ $$$$$$$$/ $$ |      
+$$    $$/ / $$   |$$    $$/ $$ |  $$ |$$       |$$ |  $$ |$$       |$$ | $$  |$$       |$$ |      
+ $$$$$$/  $$$$$$/ $$$$$$$/  $$/   $$/  $$$$$$$/ $$/   $$/  $$$$$$$/ $$/   $$/  $$$$$$$/ $$/       
+                                                                                                  
+```
+
 A CIDR checker that can compare 2+n CIDR ranges and tell you if there is any overlap in their network ranges.
+
+Currently written in Golang.
 
 ## Use
 
@@ -25,6 +42,19 @@ You will need [golang's tooling to install](https://go.dev/doc/install), once in
 ```
 go build . 
 mv cidr-checker /usr/local/bin
+```
+
+## Testing
+
+### Prerequisite
+
+You must have [Golang tooling installed](https://go.dev/doc/install).
+
+### Running
+
+```
+$ cd pkg/cidr_validators/
+$ go test
 ```
 
 ## TODO
