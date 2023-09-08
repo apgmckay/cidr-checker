@@ -4,15 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"net"
-
-	"github.com/3th1nk/cidr"
 )
 
 var ValidateCIDRSCompareErr = errors.New("ERROR: ip comparison failed")
 var ValidateCIDRFailedErr = errors.New("ERROR: parsing cidr failed")
 var ValidateInputCIDRsErr = errors.New("ERROR: must input 1 or more cidrs")
 
-func ValidateCIDR(cidrAddrs ...string) (bool, error) {
+func ValidateCIDR(errorOnMatch bool, cidrAddrs ...string) (bool, error) {
 	result, err := checkCIDRInputLength(cidrAddrs...)
 	if err != nil {
 		return result, err
@@ -28,38 +26,23 @@ func ValidateCIDR(cidrAddrs ...string) (bool, error) {
 				if err != nil {
 					return result, ValidateCIDRFailedErr
 				}
-				compareResult := cidr.IPCompare(ipnetA.IP, ipnetB.IP)
-				switch compareResult {
-				case 0:
+				if ipnetA.Contains(ipnetB.IP) {
 					result = true
-					return result, fmt.Errorf("%w, IPs %s and %s are in the same range.\n", ValidateCIDRSCompareErr, cidrAddrs[i], cidrAddrs[j])
+					if errorOnMatch {
+						err = fmt.Errorf(
+							"%w, IPs %s and %s are in the same range.\n",
+							ValidateCIDRSCompareErr,
+							cidrAddrs[i],
+							cidrAddrs[j])
+					} else {
+						err = nil
+					}
+					return result, err
 				}
 			}
 		}
 	}
 	return result, nil
-}
-
-func CIDRCompare(candidate string, cidrAddrs ...string) (bool, error) {
-	var result bool
-	_, ipnetA, err := net.ParseCIDR(candidate)
-	if err != nil {
-		return false, err
-	}
-	for _, v := range cidrAddrs {
-		_, ipnetB, err := net.ParseCIDR(v)
-		if err != nil {
-			return false, err
-		}
-
-		if ipnetA.Contains(ipnetB.IP) {
-			result = true
-			err = nil
-		} else {
-			return false, ValidateCIDRSCompareErr
-		}
-	}
-	return result, err
 }
 
 func checkCIDRInputLength(cidrAddrs ...string) (bool, error) {
