@@ -12,7 +12,7 @@ func ParseAndRun(input ...string) (string, error) {
 	var output string
 	var err error
 	if len(input) > 1 {
-		result, err := cidr_validator.ValidateCIDR(input...)
+		result, err := cidr_validator.ValidateCIDR(true, input...)
 		if result {
 			output = fmt.Sprintf("%s", err)
 		} else {
