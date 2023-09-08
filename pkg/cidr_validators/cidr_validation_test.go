@@ -15,9 +15,27 @@ func TestValidateCIDR(t *testing.T) {
 	}{
 		{
 			true,
+			[]string{""},
+			false,
+			ValidateCIDRFailedErr,
+		},
+		{
+			false,
+			[]string{""},
+			false,
+			ValidateCIDRFailedErr,
+		},
+		{
+			true,
 			[]string{"10.0.0.0/8"},
 			false,
-			ValidateInputCIDRsErr,
+			ValidateCIDRFailedErr,
+		},
+		{
+			true,
+			[]string{"bad data"},
+			false,
+			ValidateCIDRFailedErr,
 		},
 		{
 			true,
@@ -28,6 +46,12 @@ func TestValidateCIDR(t *testing.T) {
 		{
 			true,
 			[]string{"10.8.0.0/32", "10.8.0.0/32"},
+			true,
+			ValidateCIDRSCompareErr,
+		},
+		{
+			true,
+			[]string{"10.0.0.0/28", "10.0.0.0/28", "10.0.0.0/28"},
 			true,
 			ValidateCIDRSCompareErr,
 		},
@@ -54,12 +78,6 @@ func TestValidateCIDR(t *testing.T) {
 			[]string{"10.8.0.0/28", "10.8.0.16/28", "10.0.0.32/28"},
 			false,
 			nil,
-		},
-		{
-			true,
-			[]string{"10.0.0.0/28", "10.0.0.0/28", "10.0.0.0/28"},
-			true,
-			ValidateCIDRSCompareErr,
 		},
 		{
 			true,

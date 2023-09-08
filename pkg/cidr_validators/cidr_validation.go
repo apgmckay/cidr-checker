@@ -8,7 +8,6 @@ import (
 
 var ValidateCIDRSCompareErr = errors.New("ERROR: ip comparison failed")
 var ValidateCIDRFailedErr = errors.New("ERROR: parsing cidr failed")
-var ValidateInputCIDRsErr = errors.New("ERROR: must input 1 or more cidrs")
 
 func ValidateCIDR(errorOnMatch bool, cidrAddrs ...string) (bool, error) {
 	result, err := checkCIDRInputLength(cidrAddrs...)
@@ -48,10 +47,9 @@ func ValidateCIDR(errorOnMatch bool, cidrAddrs ...string) (bool, error) {
 func checkCIDRInputLength(cidrAddrs ...string) (bool, error) {
 	result := false
 	var err error
-	cidrInputLength := len(cidrAddrs)
-	if cidrInputLength <= 1 {
+	if len(cidrAddrs) <= 1 {
 		result = false
-		err = ValidateInputCIDRsErr
+		err = ValidateCIDRFailedErr
 	}
 	return result, err
 }
