@@ -1,14 +1,13 @@
 # CIDR-Checker
 
-[![GitHub](https://img.shields.io/github/license/apgmckay/cidr-checker)](https://github.com/apgmckay/cidr-checker)
-
-
-_________ .___________ __________       .__            __
+![Your Workflow Name](https://github.com/apgmckay/cidr-checker/workflows/Go/badge.svg)
+_________ .___________ __________       .__            __                 
 \_   ___ \|   \______ \\______   \ ____ |  |__   ____ |  | __ ___________ 
 /    \  \/|   ||    |  \|       _// ___\|  |  \_/ __ \|  |/ // __ \_  __ \
 \     \___|   ||    `   \    |   \  \___|   Y  \  ___/|    <\  ___/|  | \/
- \______  /___/_______  /____|_  /\___  >___|  /\___  >__|_ \\___  >__|
-        \/            \/       \/     \/     \/     \/     \/    \/
+ \______  /___/_______  /____|_  /\___  >___|  /\___  >__|_ \\___  >__|   
+        \/            \/       \/     \/     \/     \/     \/    \/       
+
 
 A CIDR checker that can compare 2+n CIDR ranges and tell you if there is any overlap in their network ranges.
 
