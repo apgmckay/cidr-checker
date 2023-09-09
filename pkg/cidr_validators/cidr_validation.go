@@ -41,35 +41,8 @@ func CheckCIDRsNotOverlap(cidrAddrs ...string) (bool, error) {
 	return result, nil
 }
 
-func ValidateCIDR(errorOnMatch bool, cidrAddrs ...string) (bool, error) {
-	result, err := checkCIDRInputLength(cidrAddrs...)
-	if err != nil {
-		return result, err
-	}
-	for i := range cidrAddrs {
-		_, ipnetA, err := net.ParseCIDR(cidrAddrs[i])
-		if err != nil {
-			return result, ValidateCIDRFailedErr
-		}
-		for j := range cidrAddrs {
-			if i != j {
-				_, ipnetB, err := net.ParseCIDR(cidrAddrs[j])
-				if err != nil {
-					return result, ValidateCIDRFailedErr
-				}
-				if ipnetA.Contains(ipnetB.IP) {
-					result = true
-					err = fmt.Errorf(
-						"%w, IPs %s and %s are in the same range.\n",
-						ValidateCIDRSCompareErr,
-						cidrAddrs[i],
-						cidrAddrs[j])
-					return result, err
-				}
-			}
-		}
-	}
-	return result, nil
+func CheckCIDRsInNetworkRange(networkRange string, cidrAddrs ...string) (bool, error) {
+	return false, nil
 }
 
 func checkCIDRInputLength(cidrAddrs ...string) (bool, error) {
