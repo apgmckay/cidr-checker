@@ -8,89 +8,70 @@ import (
 
 func TestValidateCIDR(t *testing.T) {
 	tests := []struct {
-		inputBool     bool
 		inputCIDRs    []string
 		expected      bool
 		expectedError error
 	}{
 		{
-			true,
 			[]string{"10.0.0.0/8"},
 			false,
 			ValidateInputCIDRsErr,
 		},
 		{
-			true,
 			[]string{"10.0.0.0/8", "10.0.0.0/16"},
 			true,
 			ValidateCIDRSCompareErr,
 		},
 		{
-			true,
 			[]string{"10.8.0.0/32", "10.8.0.0/32"},
 			true,
 			ValidateCIDRSCompareErr,
 		},
 		{
-			true,
-			[]string{"10.0.0.0/24", "10.0.1.0/24"},
-			false,
-			nil,
-		},
-		{
-			true,
-			[]string{"10.0.1.0/24", "10.0.2.0/24"},
-			false,
-			nil,
-		},
-		{
-			true,
-			[]string{"10.8.0.0/28", "10.8.0.16/28"},
-			false,
-			nil,
-		},
-		{
-			true,
-			[]string{"10.8.0.0/28", "10.8.0.16/28", "10.0.0.32/28"},
-			false,
-			nil,
-		},
-		{
-			true,
 			[]string{"10.0.0.0/28", "10.0.0.0/28", "10.0.0.0/28"},
 			true,
 			ValidateCIDRSCompareErr,
 		},
 		{
-			true,
+			[]string{"10.0.0.0/24", "10.0.1.0/24"},
+			false,
+			nil,
+		},
+		{
+			[]string{"10.0.1.0/24", "10.0.2.0/24"},
+			false,
+			nil,
+		},
+		{
+			[]string{"10.8.0.0/28", "10.8.0.16/28"},
+			false,
+			nil,
+		},
+		{
+			[]string{"10.8.0.0/28", "10.8.0.16/28", "10.0.0.32/28"},
+			false,
+			nil,
+		},
+		{
 			[]string{"10.8.0.0/28", "10.8.0.16/28", "10.0.0.32/28", "10.0.0.48/28"},
 			false,
 			nil,
 		},
 		{
-			true,
 			[]string{"10.8.0.16/28", "10.8.0.0/28", "10.0.0.48/28", "10.0.0.32/28"},
 			false,
 			nil,
 		},
 		{
-			true,
 			[]string{"10.8.0.16/28", "10.8.0.0/28", "10.8.0.48/28", "10.8.0.32/28", "10.8.0.64/28"},
 			false,
 			nil,
 		},
-		{
-			false,
-			[]string{"10.0.0.0/8", "10.8.0.0/28", "10.8.0.48/28", "10.8.0.32/28", "10.8.0.64/28"},
-			true,
-			nil,
-		},
 	}
-	runValidationTests(t, tests)
+	runCheckCIDRsOverlap(t, tests)
 }
 
-func runValidationTests(t *testing.T, tests []struct {
-	inputBool     bool
+func runCheckCIDRsOverlap(t *testing.T, tests []struct {
 	inputCIDRs    []string
 	expected      bool
 	expectedError error
@@ -98,7 +79,7 @@ func runValidationTests(t *testing.T, tests []struct {
 	for _, test := range tests {
 		var testCase bool
 		var err error
-		testCase, err = ValidateCIDR(test.inputBool, test.inputCIDRs...)
+		testCase, err = CheckCIDRsNotOverlap(test.inputCIDRs...)
 		if testCase != test.expected {
 			t.Logf("%t and %t are not equal.\n", testCase, test.expected)
 			t.Fail()
