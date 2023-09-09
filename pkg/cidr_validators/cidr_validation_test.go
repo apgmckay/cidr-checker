@@ -2,6 +2,7 @@ package cidr_validation
 
 import (
 	"errors"
+	"fmt"
 	"net"
 	"testing"
 )
@@ -13,14 +14,11 @@ func TestValidateCIDR(t *testing.T) {
 		expected      bool
 		expectedError error
 	}{
+		/*
+			ValidateCIDRFailedErr tests
+		*/
 		{
 			true,
-			[]string{""},
-			false,
-			ValidateCIDRFailedErr,
-		},
-		{
-			false,
 			[]string{""},
 			false,
 			ValidateCIDRFailedErr,
@@ -37,6 +35,10 @@ func TestValidateCIDR(t *testing.T) {
 			false,
 			ValidateCIDRFailedErr,
 		},
+		/*
+			ValidateCIDRSCompareErr tests
+		*/
+
 		{
 			true,
 			[]string{"10.0.0.0/8", "10.0.0.0/16"},
@@ -55,6 +57,9 @@ func TestValidateCIDR(t *testing.T) {
 			true,
 			ValidateCIDRSCompareErr,
 		},
+		/*
+			errorOnMatch: turned on tests
+		*/
 		{
 			true,
 			[]string{"10.0.0.0/24", "10.0.1.0/24"},
@@ -97,9 +102,60 @@ func TestValidateCIDR(t *testing.T) {
 			false,
 			nil,
 		},
+		/*
+			errorOnMatch: turned off tests
+		*/
 		{
 			false,
 			[]string{"10.0.0.0/8", "10.8.0.0/28", "10.8.0.48/28", "10.8.0.32/28", "10.8.0.64/28"},
+			true,
+			nil,
+		},
+		/*
+			ValidateCIDRFailedErr tests
+		*/
+		{
+			false,
+			[]string{""},
+			false,
+			ValidateCIDRFailedErr,
+		},
+		{
+			false,
+			[]string{""},
+			false,
+			ValidateCIDRFailedErr,
+		},
+		{
+			false,
+			[]string{"10.0.0.0/8"},
+			false,
+			ValidateCIDRFailedErr,
+		},
+		{
+			false,
+			[]string{"bad data"},
+			false,
+			ValidateCIDRFailedErr,
+		},
+		/*
+			ValidateCIDRSCompareErr tests
+		*/
+		{
+			false,
+			[]string{"10.0.0.0/8", "10.0.0.0/16"},
+			true,
+			nil,
+		},
+		{
+			false,
+			[]string{"10.8.0.0/32", "10.8.0.0/32"},
+			true,
+			nil,
+		},
+		{
+			false,
+			[]string{"10.0.0.0/28", "10.0.0.0/28", "10.0.0.0/28"},
 			true,
 			nil,
 		},
@@ -116,9 +172,18 @@ func runValidationTests(t *testing.T, tests []struct {
 	for _, test := range tests {
 		var testCase bool
 		var err error
+
 		testCase, err = ValidateCIDR(test.inputBool, test.inputCIDRs...)
+
 		if testCase != test.expected {
-			t.Logf("%t and %t are not equal.\n", testCase, test.expected)
+			/*
+				TODO: add it so we print the type as well this will require
+				      looking at reflection
+			*/
+			lineA := fmt.Sprintf("\ntestCase:      %t", testCase)
+			lineB := fmt.Sprintf("\ntest expected: %t", test.expected)
+			lineC := fmt.Sprintf("\n%t and %t are not equal.\n", testCase, test.expected)
+			t.Logf("%s%s%s", lineA, lineB, lineC)
 			t.Fail()
 		}
 		if errors.Is(err, test.expectedError) {
