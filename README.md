@@ -2,7 +2,7 @@
 
 ![Your Workflow Name](https://github.com/apgmckay/cidr-checker/workflows/Go/badge.svg)
 
-[Listen to Spotify](<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/1p3L5qtWbiL7upfG0sXvK0?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>)
+[Listen to Spotify](https://open.spotify.com/playlist/1p3L5qtWbiL7upfG0sXvK0?si=1c4695d886fc4727)
 
 ```
   ______   ______  _______   _______             __                  __                           
