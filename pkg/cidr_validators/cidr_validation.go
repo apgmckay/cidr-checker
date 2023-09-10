@@ -6,6 +6,7 @@ import (
 	"net"
 )
 
+var ValidateNetworkRangeErr = errors.New("ERROR: ip network range failed")
 var ValidateCIDRSCompareErr = errors.New("ERROR: ip comparison failed")
 var ValidateCIDRFailedErr = errors.New("ERROR: parsing cidr failed")
 var ValidateInputCIDRsErr = errors.New("ERROR: must input 1 or more cidrs")
@@ -46,7 +47,7 @@ func CheckCIDRsInNetworkRange(networkRange string, cidrAddrs ...string) (bool, e
 
 	_, ipnetNetworkRange, err := net.ParseCIDR(networkRange)
 	if err != nil {
-		return result, err
+		return result, ValidateNetworkRangeErr
 	}
 	for i := range cidrAddrs {
 		_, ipnet, err := net.ParseCIDR(cidrAddrs[i])

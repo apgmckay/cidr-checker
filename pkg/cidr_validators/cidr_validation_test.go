@@ -78,12 +78,12 @@ func TestCheckCIDRsInNetworkRange(t *testing.T) {
 		expectedError error
 	}{
 		// TODO: fix this test, maybe introduce a new error type
-		//	{
-		//		"bad data",
-		//		[]string{"10.0.0.0/8"},
-		//		false,
-		//		ValidateInputCIDRsErr,
-		//	},
+		{
+			"bad data",
+			[]string{"10.0.0.0/8"},
+			false,
+			ValidateNetworkRangeErr,
+		},
 		{
 			"10.0.0.0/8",
 			[]string{"192.168.0.1/32"},
