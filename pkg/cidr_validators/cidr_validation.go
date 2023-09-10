@@ -42,7 +42,27 @@ func CheckCIDRsNotOverlap(cidrAddrs ...string) (bool, error) {
 }
 
 func CheckCIDRsInNetworkRange(networkRange string, cidrAddrs ...string) (bool, error) {
-	return false, nil
+	result := false
+
+	_, ipnetNetworkRange, err := net.ParseCIDR(networkRange)
+	if err != nil {
+		return result, err
+	}
+	for i := range cidrAddrs {
+		_, ipnet, err := net.ParseCIDR(cidrAddrs[i])
+		if err != nil {
+			return result, ValidateCIDRFailedErr
+		}
+		if ipnetNetworkRange.Contains(ipnet.IP) {
+			result = true
+			err = nil
+		} else {
+			result = false
+			err = fmt.Errorf("%w, IPs %s and %s are not in the same range.\n", ValidateCIDRSCompareErr, ipnetNetworkRange, ipnet)
+			return result, err
+		}
+	}
+	return result, err
 }
 
 func checkCIDRInputLength(cidrAddrs ...string) (bool, error) {
