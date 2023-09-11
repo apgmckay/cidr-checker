@@ -50,7 +50,7 @@ func TestParserAndRun(t *testing.T) {
 		//		{
 		//			[]string{"--network", "10.0.0.0/8", "10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24", "192.168.1.0/16"},
 		//			"",
-		//			cidr_validatiors.ValidateNetworkRangeErr,
+		//			fmt.Errorf("%w, IPs %s and %s are not in the same range.", cidr_validatiors.ValidateCIDRSCompareErr, "10.0.0.0/8", "192.168.1.0/16"),
 		//		},
 	}
 	runTests(t, tests)
@@ -73,7 +73,7 @@ func runTests(t *testing.T, tests []struct {
 		if errors.Is(err, test.expectedError) {
 			t.Logf("Errors are equal.\n")
 		} else {
-			t.Logf("Errors are not equal.\n\texpected: %s\n\tgot: %s", test.expectedError, err)
+			t.Logf("Errors are not equal.\n\texpected: %s\n\tgot     : %s", test.expectedError, err)
 			t.Fail()
 			t.Logf("Failing!")
 		}
