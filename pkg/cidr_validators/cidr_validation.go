@@ -70,10 +70,7 @@ func CheckCIDRsInNetworkRange(networkRange string, cidrAddrs ...string) (bool, e
 			err = nil
 		} else {
 			result = false
-			/* TODO: Currently the mask is hardcoded, to try and get tests passing.
-			- We should store the mask in byte and covert back to dec string
-			*/
-			err = fmt.Errorf("%w, IPs %s and %s/16 are not in the same range.\n", ValidateCIDRSCompareErr, ipnetNetworkRange, ip)
+			err = fmt.Errorf("%w, IPs %s and %s are not in the same range.\n", ValidateCIDRSCompareErr, ipnetNetworkRange, ip)
 			return result, err
 		}
 	}
