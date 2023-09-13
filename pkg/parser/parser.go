@@ -4,6 +4,7 @@ import (
 	cidr_validators "cidr-checker/pkg/cidr_validators"
 	"errors"
 	"fmt"
+	"strings"
 )
 
 var ParseErr = errors.New("Parseing Error.\n")
@@ -63,7 +64,10 @@ func (f *InputFlags) Parse(input ...string) ([]string, error) {
 	var err error
 	if len(input) >= 1 {
 		for i := range input {
-			switch input[i] {
+
+			sanitizedInput := strings.TrimSpace(input[i])
+
+			switch sanitizedInput {
 			case "--help":
 				f.HelpSet = true
 				return []string{}, nil
@@ -71,7 +75,7 @@ func (f *InputFlags) Parse(input ...string) ([]string, error) {
 				f.SetNetworkAddr(input[i+1])
 				i++
 			default:
-				output = append(output, input[i])
+				output = append(output, sanitizedInput)
 			}
 		}
 	} else {
