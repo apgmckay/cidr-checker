@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net"
+	"strings"
 )
 
 var ValidateNetworkRangeErr = errors.New("ERROR: ip network range failed")
@@ -16,14 +17,18 @@ func CheckCIDRsNotOverlap(cidrAddrs ...string) (bool, error) {
 	if err != nil {
 		return result, err
 	}
-	for i := range cidrAddrs {
-		_, ipnetA, err := net.ParseCIDR(cidrAddrs[i])
+
+	var sanitizedCIDRAddrs []string
+	sanitizedCIDRAddrs = sanitizeCIDRAddrs(cidrAddrs...)
+
+	for i := range sanitizedCIDRAddrs {
+		_, ipnetA, err := net.ParseCIDR(sanitizedCIDRAddrs[i])
 		if err != nil {
 			return result, ValidateCIDRFailedErr
 		}
 		for j := range cidrAddrs {
 			if i != j {
-				_, ipnetB, err := net.ParseCIDR(cidrAddrs[j])
+				_, ipnetB, err := net.ParseCIDR(sanitizedCIDRAddrs[j])
 				if err != nil {
 					return result, ValidateCIDRFailedErr
 				}
@@ -45,12 +50,18 @@ func CheckCIDRsNotOverlap(cidrAddrs ...string) (bool, error) {
 func CheckCIDRsInNetworkRange(networkRange string, cidrAddrs ...string) (bool, error) {
 	result := false
 
-	_, ipnetNetworkRange, err := net.ParseCIDR(networkRange)
+	sanitizedNetworkRange := sanitizeNetworkAddr(networkRange)
+
+	_, ipnetNetworkRange, err := net.ParseCIDR(sanitizedNetworkRange)
 	if err != nil {
 		return result, ValidateNetworkRangeErr
 	}
-	for i := range cidrAddrs {
-		ip, _, err := net.ParseCIDR(cidrAddrs[i])
+
+	var sanitizedCIDRAddrs []string
+	sanitizedCIDRAddrs = sanitizeCIDRAddrs(cidrAddrs...)
+
+	for i := range sanitizedCIDRAddrs {
+		ip, _, err := net.ParseCIDR(sanitizedCIDRAddrs[i])
 		if err != nil {
 			return result, ValidateCIDRFailedErr
 		}
@@ -67,6 +78,18 @@ func CheckCIDRsInNetworkRange(networkRange string, cidrAddrs ...string) (bool, e
 		}
 	}
 	return result, err
+}
+
+func sanitizeNetworkAddr(networkRange string) string {
+	return strings.TrimSpace(networkRange)
+}
+
+func sanitizeCIDRAddrs(cidrAddrs ...string) []string {
+	var sanitizedCIDRAddrs []string
+	for _, v := range cidrAddrs {
+		sanitizedCIDRAddrs = append(sanitizedCIDRAddrs, strings.TrimSpace(v))
+	}
+	return sanitizedCIDRAddrs
 }
 
 func checkCIDRInputLength(cidrAddrs ...string) (bool, error) {
