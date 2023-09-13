@@ -61,7 +61,7 @@ func (f *InputFlags) SetHelp() {
 func (f *InputFlags) Parse(input ...string) ([]string, error) {
 	var output []string
 	var err error
-	if len(input) >= 0 {
+	if len(input) >= 1 {
 		for i := range input {
 			switch input[i] {
 			case "--help":
