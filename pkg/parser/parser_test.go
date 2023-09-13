@@ -28,6 +28,11 @@ func TestParserAndRun(t *testing.T) {
 			nil,
 		},
 		{
+			[]string{"   --help    "},
+			helpOutput,
+			nil,
+		},
+		{
 			[]string{"10.0.0.0/24", "10.0.1.0/24"},
 			outputSuccess,
 			nil,
