@@ -3,19 +3,13 @@ package parser
 import (
 	cidr_validatiors "cidr-checker/pkg/cidr_validators"
 	"errors"
-	"fmt"
 	"testing"
 )
 
 func TestParserAndRun(t *testing.T) {
-	lineA := fmt.Sprintln("\ncidr-check recieved No input.")
-	lineB := fmt.Sprintln("Entered from:")
-	lineC := fmt.Sprintln("os.Args like `cidr-checker 10.0.0.0/19 10.0.1.0/19 10.0.2.0/19`.")
-
-	lineD := fmt.Sprintln("--network\tcan be used to compare given addresses to the value of network.\n\t\tfor example: `cidr-checker 10.0.0.0/24 10.0.0.1/24 --network 10.0.0.0/8`")
-	helpOutput := fmt.Sprintf("%s%s%s%s", lineA, lineB, lineC, lineD)
-
-	outputSuccess := fmt.Sprintf("All good no overlapping CIDRs.\n")
+	helpOutput := helpOutput()
+	outputSuccessContains, _ := successOutput("contains")
+	outputSuccessNoOverlap, _ := successOutput("no-overlap")
 
 	tests := []struct {
 		inputs        []string
@@ -34,7 +28,7 @@ func TestParserAndRun(t *testing.T) {
 		},
 		{
 			[]string{"10.0.0.0/24", "10.0.1.0/24"},
-			outputSuccess,
+			outputSuccessNoOverlap,
 			nil,
 		},
 		{
@@ -44,12 +38,12 @@ func TestParserAndRun(t *testing.T) {
 		},
 		{
 			[]string{"--network", "10.0.0.0/8", "10.0.0.0/24"},
-			fmt.Sprintf("All good all ips in network range.\n"),
+			outputSuccessContains,
 			nil,
 		},
 		{
 			[]string{"--network", "10.0.0.0/8", "10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"},
-			fmt.Sprintf("All good all ips in network range.\n"),
+			outputSuccessContains,
 			nil,
 		},
 		{
@@ -59,17 +53,17 @@ func TestParserAndRun(t *testing.T) {
 		},
 		{
 			[]string{"--network", " 10.0.0.0/8", "  10.0.0.0/24", "10.0.1.0/24  ", "  10.0.2.0/24  "},
-			fmt.Sprintf("All good all ips in network range.\n"),
+			outputSuccessContains,
 			nil,
 		},
 		{
 			[]string{"--network", " 10.0.0.0/8", "  10.0.0.0/24", "10.0.1.0/24  ", "  10.0.2.0/24  "},
-			fmt.Sprintf("All good all ips in network range.\n"),
+			outputSuccessContains,
 			nil,
 		},
 		{
 			[]string{"  --network", " 10.0.0.0/8", "  10.0.0.0/24", "10.0.1.0/24  ", "  10.0.2.0/24  "},
-			fmt.Sprintf("All good all ips in network range.\n"),
+			outputSuccessContains,
 			nil,
 		},
 	}
