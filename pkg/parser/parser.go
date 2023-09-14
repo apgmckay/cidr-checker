@@ -34,13 +34,13 @@ func ParseAndRun(input ...string) (string, error) {
 		if result == false {
 			return "", err
 		} else {
-			return fmt.Sprintf("All good all ips in network range.\n"), err
+			output, err = successOutput("contains")
+			return output, err
 		}
 	}
 	result, err := cidr_validators.CheckCIDRsNotOverlap(parsedInput...)
 	if result == false {
-		output = fmt.Sprintf("All good no overlapping CIDRs.\n")
-		err = nil
+		output, err = successOutput("no-overlap")
 	} else {
 		output = fmt.Sprintf("%s", errors.Unwrap(err))
 	}
@@ -91,4 +91,18 @@ func helpOutput() string {
 	lineD := fmt.Sprintln("--network\tcan be used to compare given addresses to the value of network.\n\t\tfor example: `cidr-checker 10.0.0.0/24 10.0.0.1/24 --network 10.0.0.0/8`")
 	return fmt.Sprintf("%s%s%s%s", lineA, lineB, lineC, lineD)
 
+}
+
+func successOutput(input string) (string, error) {
+	var output string
+	var err error
+	switch input {
+	case "contains":
+		output = fmt.Sprintf("All good all ips in network range.\n")
+	case "no-overlap":
+		output = fmt.Sprintf("All good no overlapping CIDRs.\n")
+	default:
+		// error here
+	}
+	return output, err
 }
