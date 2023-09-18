@@ -7,7 +7,7 @@ import (
 )
 
 func TestParserAndRun(t *testing.T) {
-	helpOutput := helpOutput()
+	helpOutput := PrintHelpOutput()
 	outputSuccessContains, _ := successOutput("contains")
 	outputSuccessNoOverlap, _ := successOutput("no-overlap")
 

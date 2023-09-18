@@ -7,6 +7,19 @@ import (
 	"strings"
 )
 
+var HelpStdOutputLineA = fmt.Sprintln("\ncidr-check recieved No input.")
+var HelpStdOutputLineB = fmt.Sprintln("Entered from:")
+var HelpStdOutputLineC = fmt.Sprintln("")
+var HelpStdOutputLineD = fmt.Sprintln("os.Args like `cidr-checker 10.0.0.0/19 10.0.1.0/19 10.0.2.0/19`.")
+var HelpStdOutputLineE = fmt.Sprintln("--network\tcan be used to compare given addresses to the value of network.\n\t\tfor example: `cidr-checker 10.0.0.0/24 10.0.0.1/24 --network 10.0.0.0/8`")
+
+var HelpStdOutput = fmt.Sprintf("%s%s%s%s%s\n",
+	HelpStdOutputLineA,
+	HelpStdOutputLineB,
+	HelpStdOutputLineC,
+	HelpStdOutputLineD,
+	HelpStdOutputLineE)
+
 var ParseErr = errors.New("Parseing Error.\n")
 
 type InputFlags struct {
@@ -22,11 +35,11 @@ func ParseAndRun(input ...string) (string, error) {
 
 	parsedInput, err := flags.Parse(input...)
 	if err != nil {
-		return helpOutput(), err
+		return PrintHelpOutput(), err
 	}
 
 	if flags.HelpSet {
-		output = helpOutput()
+		output = PrintHelpOutput()
 		return output, err
 	}
 	if len(flags.NetworkAddr) >= 1 {
@@ -84,13 +97,8 @@ func (f *InputFlags) Parse(input ...string) ([]string, error) {
 	return output, err
 }
 
-func helpOutput() string {
-	lineA := fmt.Sprintln("\ncidr-check recieved No input.")
-	lineB := fmt.Sprintln("Entered from:")
-	lineC := fmt.Sprintln("os.Args like `cidr-checker 10.0.0.0/19 10.0.1.0/19 10.0.2.0/19`.")
-	lineD := fmt.Sprintln("--network\tcan be used to compare given addresses to the value of network.\n\t\tfor example: `cidr-checker 10.0.0.0/24 10.0.0.1/24 --network 10.0.0.0/8`")
-	return fmt.Sprintf("%s%s%s%s", lineA, lineB, lineC, lineD)
-
+func PrintHelpOutput() string {
+	return fmt.Sprintf("%s", HelpStdOutput)
 }
 
 func successOutput(input string) (string, error) {
