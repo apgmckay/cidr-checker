@@ -2,8 +2,8 @@ package errors
 
 /* TODO:
 - ErrorStack should be a singleton?
-- Write Pop function
 */
+
 type ErrorStack struct {
 	errors []error
 }
