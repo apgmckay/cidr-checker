@@ -13,6 +13,17 @@ func New() *ErrorStack {
 	return es
 }
 
+func (es *ErrorStack) Pop() error {
+	if es.Size() == 0 {
+		return nil
+	}
+	result := es.errors[es.Size()-1]
+
+	es.errors = es.errors[:len(es.errors)-1]
+
+	return result
+}
+
 func (es *ErrorStack) Push(err error) error {
 	es.errors = append(es.errors, err)
 	return nil

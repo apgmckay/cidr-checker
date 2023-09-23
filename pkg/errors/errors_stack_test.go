@@ -24,3 +24,19 @@ func TestPush(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestPop(t *testing.T) {
+	stackSize := 400
+
+	n := New()
+	for i := 0; i < stackSize; i++ {
+		n.Push(fmt.Errorf("err %d", i))
+	}
+	for i := stackSize; i == 0; i-- {
+		n.Pop()
+		if n.Size() != i {
+			t.Logf("Size of error stack is %d, expected: %d", n.errors, i)
+			t.Fail()
+		}
+	}
+}
