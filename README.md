@@ -43,14 +43,17 @@ You can also check that a specified network address contains the supplied IPs:
 $ cidr-checker --network 10.0.0.0/8 10.0.1.0/24 10.0.2.0/24 10.0.3.0/24
 ```
 
-## Build and Install
+## Build 
 
 You will need [golang's tooling to install](https://go.dev/doc/install), once install.
 
 ```
 go build . 
-mv cidr-checker /usr/local/bin
 ```
+
+## Install
+
+To install this to your machine simply download the latest release from [releases](https://github.com/apgmckay/cidr-checker/releases) and copy into you bin path e.g. /usr/local/bin/. 
 
 ## Testing
 
@@ -64,4 +67,3 @@ You must have [Golang tooling installed](https://go.dev/doc/install).
 $ cd pkg/cidr_validators/
 $ go test
 ```
-
