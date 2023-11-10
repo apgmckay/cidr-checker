@@ -85,6 +85,9 @@ func (f *InputFlags) Parse(input ...string) ([]string, error) {
 				f.HelpSet = true
 				return []string{}, nil
 			case "--network":
+				if len(input) < 2 {
+					return output, ParseErr
+				}
 				f.SetNetworkAddr(input[i+1])
 				i++
 			default:

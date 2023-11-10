@@ -66,6 +66,11 @@ func TestParserAndRun(t *testing.T) {
 			outputSuccessContains,
 			nil,
 		},
+		{
+			[]string{"--network"},
+			helpOutput,
+			ParseErr,
+		},
 	}
 	runTests(t, tests)
 }
