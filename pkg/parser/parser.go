@@ -20,7 +20,7 @@ var HelpStdOutput = fmt.Sprintf("%s%s%s%s%s\n",
 	HelpStdOutputLineD,
 	HelpStdOutputLineE)
 
-var ParseErr = errors.New("Parseing Error.\n")
+var ErrParse = errors.New("Parseing Error.\n")
 
 type InputFlags struct {
 	NetworkAddr string
@@ -86,7 +86,7 @@ func (f *InputFlags) Parse(input ...string) ([]string, error) {
 				return []string{}, nil
 			case "--network":
 				if len(input) < 2 {
-					return output, ParseErr
+					return output, ErrParse
 				}
 				f.SetNetworkAddr(input[i+1])
 				i++

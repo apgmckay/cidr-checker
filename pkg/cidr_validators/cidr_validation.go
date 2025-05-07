@@ -7,10 +7,10 @@ import (
 	"strings"
 )
 
-var ValidateNetworkRangeErr = errors.New("ERROR: ip network range failed")
-var ValidateCIDRSCompareErr = errors.New("ERROR: ip comparison failed")
-var ValidateCIDRFailedErr = errors.New("ERROR: parsing cidr failed")
-var ValidateInputCIDRsErr = errors.New("ERROR: must input 1 or more cidrs")
+var ErrValidateNetworkRange = errors.New("ERROR: ip network range failed")
+var ErrValidateCIDRSCompare = errors.New("ERROR: ip comparison failed")
+var ErrValidateCIDRFailed = errors.New("ERROR: parsing cidr failed")
+var ErrValidateInputCIDRs = errors.New("ERROR: must input 1 or more cidrs")
 
 func CheckCIDRsNotOverlap(cidrAddrs ...string) (bool, error) {
 	result, err := checkCIDRInputLength(cidrAddrs...)
@@ -24,19 +24,19 @@ func CheckCIDRsNotOverlap(cidrAddrs ...string) (bool, error) {
 	for i := range sanitizedCIDRAddrs {
 		_, ipnetA, err := net.ParseCIDR(sanitizedCIDRAddrs[i])
 		if err != nil {
-			return result, ValidateCIDRFailedErr
+			return result, ErrValidateCIDRFailed
 		}
 		for j := range cidrAddrs {
 			if i != j {
 				_, ipnetB, err := net.ParseCIDR(sanitizedCIDRAddrs[j])
 				if err != nil {
-					return result, ValidateCIDRFailedErr
+					return result, ErrValidateCIDRFailed
 				}
 				if ipnetA.Contains(ipnetB.IP) {
 					result = true
 					err = fmt.Errorf(
 						"%w, IPs %s and %s are in the same range.\n",
-						ValidateCIDRSCompareErr,
+						ErrValidateCIDRSCompare,
 						cidrAddrs[i],
 						cidrAddrs[j])
 					return result, err
@@ -54,7 +54,7 @@ func CheckCIDRsInNetworkRange(networkRange string, cidrAddrs ...string) (bool, e
 
 	_, ipnetNetworkRange, err := net.ParseCIDR(sanitizedNetworkRange)
 	if err != nil {
-		return result, ValidateNetworkRangeErr
+		return result, ErrValidateNetworkRange
 	}
 
 	var sanitizedCIDRAddrs []string
@@ -63,14 +63,14 @@ func CheckCIDRsInNetworkRange(networkRange string, cidrAddrs ...string) (bool, e
 	for i := range sanitizedCIDRAddrs {
 		ip, _, err := net.ParseCIDR(sanitizedCIDRAddrs[i])
 		if err != nil {
-			return result, ValidateCIDRFailedErr
+			return result, ErrValidateCIDRFailed
 		}
 		if ipnetNetworkRange.Contains(ip) {
 			result = true
 			err = nil
 		} else {
 			result = false
-			err = fmt.Errorf("%w, IPs %s and %s are not in the same range.\n", ValidateCIDRSCompareErr, ipnetNetworkRange, ip)
+			err = fmt.Errorf("%w, IPs %s and %s are not in the same range.\n", ErrValidateCIDRSCompare, ipnetNetworkRange, ip)
 			return result, err
 		}
 	}
@@ -95,7 +95,7 @@ func checkCIDRInputLength(cidrAddrs ...string) (bool, error) {
 	cidrInputLength := len(cidrAddrs)
 	if cidrInputLength <= 1 {
 		result = false
-		err = ValidateInputCIDRsErr
+		err = ErrValidateInputCIDRs
 	}
 	return result, err
 }
