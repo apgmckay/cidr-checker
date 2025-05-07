@@ -14,22 +14,22 @@ func TestCheckCIDRsNotOverlap(t *testing.T) {
 		{
 			[]string{"10.0.0.0/8"},
 			false,
-			ValidateInputCIDRsErr,
+			ErrValidateInputCIDRs,
 		},
 		{
 			[]string{"10.0.0.0/8", "10.0.0.0/16"},
 			true,
-			ValidateCIDRSCompareErr,
+			ErrValidateCIDRSCompare,
 		},
 		{
 			[]string{"10.8.0.0/32", "10.8.0.0/32"},
 			true,
-			ValidateCIDRSCompareErr,
+			ErrValidateCIDRSCompare,
 		},
 		{
 			[]string{"10.0.0.0/28", "10.0.0.0/28", "10.0.0.0/28"},
 			true,
-			ValidateCIDRSCompareErr,
+			ErrValidateCIDRSCompare,
 		},
 		{
 			[]string{"10.0.0.0/24", "10.0.1.0/24"},
@@ -87,25 +87,25 @@ func TestCheckCIDRsInNetworkRange(t *testing.T) {
 			"bad data",
 			[]string{"10.0.0.0/8"},
 			false,
-			ValidateNetworkRangeErr,
+			ErrValidateNetworkRange,
 		},
 		{
 			"10.0.0.0/8",
 			[]string{"192.168.0.1/32"},
 			false,
-			ValidateCIDRSCompareErr,
+			ErrValidateCIDRSCompare,
 		},
 		{
 			"10.0.0.0/8",
 			[]string{"10.8.0.0/32", "192.168.0.1/32"},
 			false,
-			ValidateCIDRSCompareErr,
+			ErrValidateCIDRSCompare,
 		},
 		{
 			"10.0.0.0/8",
 			[]string{"10.0.0.0/28", "10.0.0.0/28", "192.168.0.1/32"},
 			false,
-			ValidateCIDRSCompareErr,
+			ErrValidateCIDRSCompare,
 		},
 		{
 			"10.0.0.0/8",

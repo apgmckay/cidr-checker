@@ -33,8 +33,8 @@ func TestParserAndRun(t *testing.T) {
 		},
 		{
 			[]string{"10.0.0.0/24", "10.0.0.0/24"},
-			cidr_validatiors.ValidateCIDRSCompareErr.Error(),
-			cidr_validatiors.ValidateCIDRSCompareErr,
+			cidr_validatiors.ErrValidateCIDRSCompare.Error(),
+			cidr_validatiors.ErrValidateCIDRSCompare,
 		},
 		{
 			[]string{"--network", "10.0.0.0/8", "10.0.0.0/24"},
@@ -49,7 +49,7 @@ func TestParserAndRun(t *testing.T) {
 		{
 			[]string{"--network", "10.0.0.0/8", "10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24", "192.168.1.0/16"},
 			"",
-			cidr_validatiors.ValidateCIDRSCompareErr,
+			cidr_validatiors.ErrValidateCIDRSCompare,
 		},
 		{
 			[]string{"--network", " 10.0.0.0/8", "  10.0.0.0/24", "10.0.1.0/24  ", "  10.0.2.0/24  "},
@@ -69,7 +69,7 @@ func TestParserAndRun(t *testing.T) {
 		{
 			[]string{"--network"},
 			helpOutput,
-			ParseErr,
+			ErrParse,
 		},
 	}
 	runTests(t, tests)

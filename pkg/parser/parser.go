@@ -29,7 +29,6 @@ type InputFlags struct {
 
 func ParseAndRun(input ...string) (string, error) {
 	var output string
-	var err error
 
 	flags := NewInputFlags()
 
@@ -44,7 +43,7 @@ func ParseAndRun(input ...string) (string, error) {
 	}
 	if len(flags.NetworkAddr) >= 1 {
 		result, err := cidr_validators.CheckCIDRsInNetworkRange(flags.NetworkAddr, parsedInput...)
-		if result == false {
+		if !result {
 			return "", err
 		} else {
 			output, err = successOutput("contains")
@@ -52,7 +51,7 @@ func ParseAndRun(input ...string) (string, error) {
 		}
 	}
 	result, err := cidr_validators.CheckCIDRsNotOverlap(parsedInput...)
-	if result == false {
+	if !result {
 		output, err = successOutput("no-overlap")
 	} else {
 		output = fmt.Sprintf("%s", errors.Unwrap(err))
@@ -101,7 +100,7 @@ func (f *InputFlags) Parse(input ...string) ([]string, error) {
 }
 
 func PrintHelpOutput() string {
-	return fmt.Sprintf("%s", HelpStdOutput)
+	return HelpStdOutput
 }
 
 func successOutput(input string) (string, error) {
@@ -109,9 +108,9 @@ func successOutput(input string) (string, error) {
 	var err error
 	switch input {
 	case "contains":
-		output = fmt.Sprintf("All good all ips in network range.\n")
+		output = "All good all ips in network range.\n"
 	case "no-overlap":
-		output = fmt.Sprintf("All good no overlapping CIDRs.\n")
+		output = "All good no overlapping CIDRs.\n"
 	default:
 		// error here
 	}
